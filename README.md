@@ -1,6 +1,6 @@
 # SETUP
 
-- Find/Replace `package_template` to name of the name of the package (ex: `flutter_rocks`), using the folder the of the package is a good practice, but not an absolute.
+- Find/Replace `ui_dialerbutton_flutter` to name of the name of the package (ex: `flutter_rocks`), using the folder the of the package is a good practice, but not an absolute.
 
 - Follow the instructions in the **/example/README.md** to have the demo app show features of the package with a live demo for dark, light, and system themes.
 

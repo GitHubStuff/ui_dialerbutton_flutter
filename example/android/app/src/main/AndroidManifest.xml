@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.icodeforyou.bundleSuffix">
+    package="com.icodeforyou.ui_dialerbutton_flutter">
    <application
-        android:label="MyAppName"
+        android:label="Phone Button Demo"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
