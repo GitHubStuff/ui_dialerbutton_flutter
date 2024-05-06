@@ -15,7 +15,8 @@ dependencies:
   gap: ^3.0.1 # Add a gap between widgets regardless of direction (vertical/horizontal).
   ui_extensions_flutter:
     git: https://github.com/GitHubStuff/ui_extensions_flutter.git
-
+  ui_haptics_flutter:
+    git: https://github.com/GitHubStuff/ui_haptics_flutter.git
   ui_dialerbutton_flutter:
     path: ../../ui_dialerbutton_flutter
 

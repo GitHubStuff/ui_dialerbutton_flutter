@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ui_dialerbutton_flutter/source/dialer_button.dart';
+import 'package:ui_haptics_flutter/ui_haptics_flutter.dart';
 
 import '../gen/assets.gen.dart';
 
@@ -53,16 +54,16 @@ class InitialScreen extends StatelessWidget {
           const Gap(15.0),
           DialerButton(
             topWidget: const Text('1',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            bottomWidget: const Text('',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
-            diameter: 48.0,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            bottomWidget: const SizedBox.shrink(),
+            diameter: 80.0,
             borderColor: Colors.deepPurple, // Example usage
             backgroundColor: Colors.black.withOpacity(0.1), // Example usage
             splashColor: Colors.green.withOpacity(0.1), // Example usage
             lineColor: Colors.green,
 
-            onPressed: () {
+            onTapUp: (details) {
+              HapticFeedbackEnum.lightImpact.haptic;
               const snackBar = SnackBar(
                 content: Text('🤣 That Tickles!'),
                 duration: Duration(milliseconds: 500),
@@ -77,7 +78,7 @@ class InitialScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             bottomWidget: null,
             borderColor: Colors.purple,
-            onPressed: () {
+            onTapUp: (details) {
               const snackBar = SnackBar(
                 content: Text('🤣 That Tickles!'),
                 duration: Duration(milliseconds: 500),
@@ -95,9 +96,12 @@ class InitialScreen extends StatelessWidget {
             bottomWidget: const Text('ABC',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             borderColor: Colors.purple,
-            onPressed: () {
+            onTapDown: (details) {
+              HapticFeedbackEnum.heavyImpact.haptic;
+            },
+            onTapUp: (details) {
               const snackBar = SnackBar(
-                content: Text('🤣 That Tickles!'),
+                content: Text('🤣 HeeHee, That Tickles!'),
                 duration: Duration(milliseconds: 500),
                 behavior: SnackBarBehavior.floating,
               );
