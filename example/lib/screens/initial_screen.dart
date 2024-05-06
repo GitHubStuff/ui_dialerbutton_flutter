@@ -52,7 +52,7 @@ class InitialScreen extends StatelessWidget {
           ),
           const Gap(15.0),
           DialerButton(
-            topWidget: const Text('#',
+            topWidget: const Text('1',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             bottomWidget: const Text('',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),

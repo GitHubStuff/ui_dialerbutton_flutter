@@ -1,53 +1,95 @@
 import 'package:flutter/material.dart';
 
-class DialerButton extends StatelessWidget {
+class DialerButton extends StatefulWidget {
   final Widget topWidget;
   final Widget? bottomWidget;
   final VoidCallback? onPressed;
   final double diameter;
-  final Color lineColor, borderColor, backgroundColor, splashColor;
+  final Color lineColor;
+  final Color borderColor;
+  final Color backgroundColor;
+  final Color splashColor;
 
   const DialerButton({
     super.key,
     required this.topWidget,
     this.bottomWidget,
     this.onPressed,
-    this.diameter = 48.0,
+    this.diameter = 80.0,
     this.lineColor = Colors.transparent,
     this.borderColor = Colors.transparent,
     this.backgroundColor = Colors.transparent,
-    this.splashColor = const Color(0x1900FF00),
+    this.splashColor = const Color(0x1900FF00), // Very light transparent green
   });
 
   @override
+  State<DialerButton> createState() => _DialerButtonState();
+}
+
+class _DialerButtonState extends State<DialerButton> {
+  final GlobalKey topKey = GlobalKey();
+  final GlobalKey bottomKey = GlobalKey();
+  double? topWidgetHeight;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _calculateSizes());
+  }
+
+  void _calculateSizes() {
+    final RenderBox renderBoxTop =
+        topKey.currentContext?.findRenderObject() as RenderBox;
+    topWidgetHeight =
+        renderBoxTop.size.height; // Get the height of the top widget
+    setState(() {}); // Trigger a rebuild with the new height
+  }
+
+  @override
   Widget build(BuildContext context) {
-    double topWidgetOffset = diameter / 2 - 4;
-    double bottomWidgetOffset = diameter / 2 + 4;
+    final double centerLine = widget.diameter / 2;
+    final double topWidgetOffset = topWidgetHeight != null
+        ? centerLine - topWidgetHeight!
+        : centerLine; // Calculate the top offset
+
+    final double bottomWidgetOffset = centerLine / 2 + 12.0;
 
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(backgroundColor),
-        foregroundColor: MaterialStateProperty.all(Colors.black),
-        shape: MaterialStateProperty.all(
-          CircleBorder(side: BorderSide(color: borderColor, width: 2)),
-        ),
-        padding: MaterialStateProperty.all(EdgeInsets.all(diameter / 10)),
-        fixedSize: MaterialStateProperty.all(Size(diameter, diameter)),
-        elevation: MaterialStateProperty.all(0.0),
-        overlayColor: MaterialStateProperty.all(splashColor),
-      ),
-      onPressed: onPressed,
+          backgroundColor: MaterialStateProperty.all(widget.backgroundColor),
+          foregroundColor: MaterialStateProperty.all(Colors.black),
+          shape: MaterialStateProperty.all(CircleBorder(
+              side: BorderSide(color: widget.borderColor, width: 2))),
+          padding:
+              MaterialStateProperty.all(EdgeInsets.all(widget.diameter / 10)),
+          fixedSize:
+              MaterialStateProperty.all(Size(widget.diameter, widget.diameter)),
+          elevation: MaterialStateProperty.all(0.0),
+          overlayColor: MaterialStateProperty.all(widget.splashColor)),
+      onPressed: widget.onPressed,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          (bottomWidget == null)
-              ? Center(child: topWidget)
-              : Positioned(bottom: topWidgetOffset, child: topWidget),
-          if (bottomWidget != null)
-            Positioned(top: bottomWidgetOffset, child: bottomWidget!),
+          Positioned(
+            top: topWidgetOffset,
+            child: SizedBox(
+              key: topKey,
+              child: widget.topWidget,
+            ),
+          ),
+          if (widget.bottomWidget != null)
+            Positioned(
+              top: bottomWidgetOffset,
+              child: SizedBox(
+                key: bottomKey,
+                child: Center(child: widget.bottomWidget),
+              ),
+            ),
           Positioned.fill(
-              child:
-                  CustomPaint(painter: EquatorLinePainter(color: lineColor))),
+            child: CustomPaint(
+              painter: EquatorLinePainter(color: widget.lineColor),
+            ),
+          ),
         ],
       ),
     );
