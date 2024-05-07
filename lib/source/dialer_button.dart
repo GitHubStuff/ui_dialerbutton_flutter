@@ -11,17 +11,20 @@ class DialerButton extends StatefulWidget {
   final Color backgroundColor;
   final Color splashColor;
 
+  static const double defaultDiameter = 80.0;
+  static const Color defaultSplashColor = Color(0x1900FF00);
+
   const DialerButton({
     super.key,
     required this.topWidget,
     this.bottomWidget,
     this.onTapUp,
     this.onTapDown,
-    this.diameter = 80.0,
+    this.diameter = defaultDiameter,
     this.lineColor = Colors.transparent,
     this.borderColor = Colors.transparent,
     this.backgroundColor = Colors.transparent,
-    this.splashColor = const Color(0x1900FF00), // Very light transparent green
+    this.splashColor = defaultSplashColor,
   });
 
   @override
@@ -32,6 +35,13 @@ class _DialerButtonState extends State<DialerButton> {
   final GlobalKey topKey = GlobalKey();
   final GlobalKey bottomKey = GlobalKey();
   double? topWidgetHeight;
+
+  static const double borderWidth = 2.0;
+  static const double elevation = 0.0;
+  static const double bottomWidgetVerticalOffset = 12.0;
+  static const double paddingFraction =
+      10.0; // Represents padding as a fraction of the diameter
+  static const double strokeWidth = 1.0;
 
   @override
   void initState() {
@@ -52,23 +62,24 @@ class _DialerButtonState extends State<DialerButton> {
   @override
   Widget build(BuildContext context) {
     final double centerLine = widget.diameter / 2;
-    final double topWidgetOffset = topWidgetHeight != null
-        ? centerLine - topWidgetHeight!
+    final double topWidgetOffset = widget.bottomWidget != null
+        ? centerLine - (topWidgetHeight ?? 0)
         : centerLine; // Calculate the top offset
 
-    final double bottomWidgetOffset = centerLine / 2 + 12.0;
+    final double bottomWidgetOffset =
+        centerLine / 2 + bottomWidgetVerticalOffset;
 
     return ElevatedButton(
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(widget.backgroundColor),
           foregroundColor: MaterialStateProperty.all(Colors.black),
           shape: MaterialStateProperty.all(CircleBorder(
-              side: BorderSide(color: widget.borderColor, width: 2))),
-          padding:
-              MaterialStateProperty.all(EdgeInsets.all(widget.diameter / 10)),
+              side: BorderSide(color: widget.borderColor, width: borderWidth))),
+          padding: MaterialStateProperty.all(
+              EdgeInsets.all(widget.diameter / paddingFraction)),
           fixedSize:
               MaterialStateProperty.all(Size(widget.diameter, widget.diameter)),
-          elevation: MaterialStateProperty.all(0.0),
+          elevation: MaterialStateProperty.all(elevation),
           overlayColor: MaterialStateProperty.all(widget.splashColor)),
       onPressed: () {}, //Use an empty onPressed make interactive
       child: GestureDetector(
@@ -119,7 +130,7 @@ class EquatorLinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = color
-      ..strokeWidth = 1.0;
+      ..strokeWidth = _DialerButtonState.strokeWidth;
 
     canvas.drawLine(
       Offset(0, size.height / 2),
